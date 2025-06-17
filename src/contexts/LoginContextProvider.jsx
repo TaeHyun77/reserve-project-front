@@ -1,0 +1,146 @@
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../api/api";
+import * as auth from "../api/auth";
+import Cookies from "js-cookie";
+
+export const LoginContext = React.createContext();
+LoginContext.displayName = "LoginContextName";
+
+const LoginContextProvider = ({ children }) => {
+
+  const navigate = useNavigate(); 
+
+  const [isLogin, setIsLogin] = useState(false);
+
+  const [userInfo, setUserInfo] = useState({});
+
+  const [roles, setRoles] = useState({ isUser: false, isAdmin: false });
+
+  const loginCheck = async () => {
+    const accessToken = Cookies.get("accessToken");
+
+    if (!accessToken) {
+      console.log(`쿠키에 accessToken 없음`);
+      logoutSetting();
+      return;
+    }
+
+    api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+
+    let response;
+    let data;
+
+    try {
+      response = await auth.info();
+      data = response.data;
+      console.log(`data : ${data}`);
+
+      if (data == "UNAUTHORIZED" || response.status == 401) {
+        console.error(`accessToken이 만료되거나 인증 실패되었습니다.`);
+        return;
+      }
+      console.log(`accessToken으로 사용자 정보 요청 성공`);
+
+      loginSetting(data, accessToken);
+    } catch (error) {
+      console.log(`error : ${error}`);
+
+      if (error.response && error.response.status) {
+        console.log(`status : ${error.response.status}`);
+      }
+
+      return;
+    }
+  };
+
+  const login = async (username, password) => {
+
+    try {
+      const response = await auth.login(username, password);
+      const data = response.data;
+      const status = response.status;
+      const headers = response.headers;
+      const authorization = headers.access;
+
+      if (status === 200) {
+        Cookies.set("accessToken", authorization);
+
+        loginCheck();
+        alert(`로그인 성공`);
+
+        navigate("/");
+      }
+    } catch (error) {
+      alert(`로그인 실패되었습니다..!`);
+    }
+  };
+
+  // 로그인 세팅
+  const loginSetting = (userData, accessToken) => {
+    const { username, role, name, email } = userData;
+
+    console.log(`username: ${username}`);
+    console.log(`role : ${role}`);
+    console.log(`name : ${name}`);
+    console.log(`email : ${email}`);
+
+    api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+
+    setIsLogin(true);
+
+    const updatedUserInfo = { username, role, name, email };
+    setUserInfo(updatedUserInfo);
+
+    const updatedRoles = { isUser: false, isAdmin: false };
+
+    if (role === "USER") {
+      updatedRoles.isUser = true;
+    } else if (role === "ADMIN") {
+      updatedRoles.isAdmin = true;
+    }
+
+    setRoles(updatedRoles);
+  };
+
+  const logoutSetting = () => {
+    api.defaults.headers.common.Authorization = undefined;
+
+    Cookies.remove("accessToken");
+
+    setIsLogin(false);
+
+    setUserInfo(null);
+
+    setRoles({ isUser: false, isAdmin: false });
+  };
+
+  const logout = () => {
+    const check = window.confirm("로그아웃 하시겠습니까 ?");
+
+    if (check) {
+      alert("로그아웃 되었습니다.")
+      logoutSetting();
+      navigate("/");
+    }
+  };
+
+  const DeleteLogout = () => {
+    logoutSetting();
+    navigate("/");
+  };
+
+  useEffect(() => {
+    loginCheck();
+  }, []);
+
+  return (
+    <LoginContext.Provider
+      value={{ isLogin, userInfo, roles, login, logout, DeleteLogout }}
+    >
+      {children}
+    </LoginContext.Provider>
+  );
+};
+
+export default LoginContextProvider;
