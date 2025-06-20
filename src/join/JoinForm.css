@@ -90,3 +90,15 @@
 .file-input-label:hover {
   background-color: red;
 }
+
+.form-hint {
+  margin: 4px 0;
+  color: #666;
+  font-size: 13px;
+}
+
+.form-hint2 {
+  margin: 4px 0;
+  color: red;
+  font-size: 13px;
+}
