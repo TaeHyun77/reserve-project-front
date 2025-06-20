@@ -1,0 +1,83 @@
+.seat-container {
+    padding: 40px;
+    text-align: center;
+    margin-top: 200px;
+}
+
+.seat-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 60px);
+    grid-template-rows: repeat(5, 60px);
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.seat {
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.seat:hover {
+    background-color: #b0c4de;
+}
+
+.seat.selected {
+    background-color: #007bff;
+    color: white;
+}
+
+.seat.reserved {
+    background-color: red;
+    color: #fff;
+    cursor: not-allowed;
+    pointer-events: none; /* 마우스 이벤트 차단 */
+}
+
+.reserve-button {
+    margin-top: 50px;
+    padding: 15px 60px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #3a9f97;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.reserve-button:hover {
+    background-color: #218838;
+}
+
+.person-counter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 50px;
+}
+
+.person-counter button {
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    background-color: #3a9f97;
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.person-counter span {
+    font-size: 18px;
+    font-weight: bold;
+}

@@ -29,34 +29,34 @@ const JoinForm = () => {
   };
 
   const join = async (form) => {
-      console.log(form);
-  
-      let response;
-      let data;
-  
-      try {
-        response = await auth.join(form);
-      } catch (error) {
-        console.error(`${error}`);
-        console.error(`회원가입 중 에러가 발생하였습니다.`);
-        alert(`회원가입 중 오류가 발생했습니다 ..!`);
-        return;
-      }
-  
-      data = response.data;
-      const status = response.status;
-      console.log(`data : ${data}`);
-      console.log(`status : ${status}`);
-  
-      if (status === 200) {
-        console.log(`회원가입 성공 !!`);
-        alert(`회원가입 성공 !`);
-        navigate("/login");
-      } else {
-        console.log(`회원가입 실패.. !!`);
-        alert(`회원가입 실패.. !!`);
-      }
-    };
+    console.log(form);
+
+    let response;
+    let data;
+
+    try {
+      response = await auth.join(form);
+    } catch (error) {
+      console.error(`${error}`);
+      console.error(`회원가입 중 에러가 발생하였습니다.`);
+      alert(`회원가입 중 오류가 발생했습니다 ..!`);
+      return;
+    }
+
+    data = response.data;
+    const status = response.status;
+    console.log(`data : ${data}`);
+    console.log(`status : ${status}`);
+
+    if (status === 200) {
+      console.log(`회원가입 성공 !!`);
+      alert(`회원가입 성공 !`);
+      navigate("/login");
+    } else {
+      console.log(`회원가입 실패.. !!`);
+      alert(`회원가입 실패.. !!`);
+    }
+  };
 
   return (
     <>
@@ -67,6 +67,12 @@ const JoinForm = () => {
         <form className="join-form" onSubmit={(e) => onJoin(e)}>
           <div>
             <label htmlFor="username">아이디</label>
+            <p className="form-hint">
+              대문자, 숫자를 적어도 하나 이상 포함해야 하며,  특수문자는 (@#%*^)만 허용됩니다.
+            </p>
+            <p className="form-hint2">
+              ⭐️ 공백 및 하이픈(-)을 사용할 시 자동으로 제거됩니다. ⭐️
+            </p>
             <input
               type="text"
               id="username"
