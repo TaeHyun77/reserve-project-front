@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Header from "../header/Header";
 import * as auth from "../api/auth";
 import "./Seat.css";
 
 const Seat = () => {
+    const navigate = useNavigate();
+
     const { placeId, performanceId } = useParams();
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [reservedSeats, setReservedSeats] = useState([]);
     const [personCount, setPersonCount] = useState(1); // 인원 수, 1 ~ 5명
+
+    const [seatPrice, setSeatPrice] = useState()
 
     const totalRows = 5;
     const totalCols = 5;
@@ -27,6 +31,18 @@ const Seat = () => {
         }
     };
 
+    const getSeatPrice = async () => {
+        try {
+            const response = await auth.seatPrice(performanceId);
+            const data = response.data;
+            console.log("seat price : " + data)
+
+            setSeatPrice(data);
+        } catch (error) {
+            console.error("좌석 가격 불러오기 실패 : " + error);
+        }
+    }
+
     const getSeatList = async () => {
         try {
             const response = await auth.seatList(placeId, performanceId);
@@ -42,41 +58,26 @@ const Seat = () => {
         }
     };
 
-    const reserveSeats = async () => {
+    const goToPayment = () => {
         if (selectedSeats.length === 0) {
             alert("좌석을 선택해주세요!");
             return;
         }
-
-        const check = window.confirm("예약 하시겠습니까 ?")
-
-        if (check) {
-            try {
-                const seatsInfo = {
-                    placeId: Number(placeId),
-                    performanceId: Number(performanceId),
-                    seats: selectedSeats
-                };
-
-                const response = await auth.reserveSeat(seatsInfo);
-                const data = response.data
-
-                if (response.status == 200) {
-                    alert("예약 성공!");
-                    setSelectedSeats([]);
-                } else {
-                    alert("예약 실패: " + (data.message || "알 수 없는 오류"));
-                }
-
-            } catch (error) {
-                console.error("예약 실패:", error);
-                alert("예약 중 오류가 발생했습니다.");
-            }
-        }
+    
+        const seatsInfo = {
+            placeId: Number(placeId),
+            performanceId: Number(performanceId),
+            seats: selectedSeats,
+            personCount: personCount,
+            seatPrice: seatPrice
+        };
+    
+        navigate("/payment", { state: seatsInfo });
     };
 
     useEffect(() => {
         getSeatList();
+        getSeatPrice()
     }, []);
 
     const increasePerson = () => {
@@ -124,8 +125,8 @@ const Seat = () => {
                     <button onClick={increasePerson}>+</button>
                 </div>
 
-                <button className="reserve-button" onClick={reserveSeats}>
-                    예약하기
+                <button className="reserve-button" onClick={goToPayment}>
+                    결제하기
                 </button>
             </div>
         </>
