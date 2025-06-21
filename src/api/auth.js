@@ -14,3 +14,5 @@ export const placeList = () => api.get(`/place/list`)
 export const seatList = (placeId, performanceId) => api.get(`/seat/list/${placeId}/${performanceId}`)
 
 export const reserveSeat = (seatsInfo) => api.post(`/seat/reserve`, seatsInfo)
+
+export const seatPrice = (performanceId) => api.get(`/seat/price/${performanceId}`)

@@ -11,6 +11,7 @@ import Join from "./join/JoinForm"
 import About from "./About"
 import Place from "./place/Place";
 import Seat from "./seat/Seat"
+import Payment from "./payment/Payment"
 
 const App = () => {
   return (
@@ -23,7 +24,7 @@ const App = () => {
           <Route path="/about" element={<About />} /> 
           <Route path="/place/:id" element={<Place />} />
           <Route path="/Seat/:placeId/:performanceId" element={<Seat />} />
-
+          <Route path="/payment" element={<Payment />} />
         </Routes>
       </LoginContextProvider>
     </BrowserRouter>

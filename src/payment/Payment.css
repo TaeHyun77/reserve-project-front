@@ -1,0 +1,39 @@
+.payment-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    font-family: "Noto Sans KR", sans-serif;
+}
+
+.payment-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.payment-detail {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #444;
+    line-height: 1.6;
+}
+
+.payment-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.payment-button:hover {
+    background-color: #45a049;
+}
