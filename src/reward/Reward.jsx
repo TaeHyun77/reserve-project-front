@@ -1,0 +1,104 @@
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { LoginContext } from "../contexts/LoginContextProvider";
+import * as auth from "../api/auth";
+import Header from "../header/Header"
+import "./Reward.css";
+
+const Reward = () => {
+    const navigate = useNavigate()
+
+    const { userInfo } = useContext(LoginContext);
+    const [rewardedDates, setRewardedDates] = useState([]);
+
+    const formatDate = (date) => {
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth() + 1).padStart(2, "0");
+        const dd = String(date.getDate()).padStart(2, "0");
+        return `${yyyy}-${mm}-${dd}`;
+    };
+
+    const handleReward = () => {
+        if (!rewardedDates.includes(today)) {
+            setRewardedDates([...rewardedDates, today]);
+        }
+    };
+
+    const setRewardDate = async () => {
+        try {
+            const response = await auth.setRewardDate(today)
+
+            if (response.status === 200) {
+                alert("200 포인트 지급 성공 !");
+                navigate("/reward");
+            }
+        } catch (error) {
+            console.error("리워드 지급 실패 :", error);
+
+            const errorCode = error?.response?.data?.code;
+            const errorMessage = error?.response?.data?.message;
+
+            if (errorCode) {
+                switch (errorCode) {
+                    case "REWARD_ALREADY_CLAIMED":
+                        alert("오늘 이미 리워드가 지급되었습니다.");
+                        break;
+                    default:
+                        alert("리워드 지급 실패: " + (errorMessage || "알 수 없는 오류"));
+                }
+            } else {
+                alert("리워드 지급 실패 ! 서버 응답이 없습니다.");
+            }
+        }
+    }
+
+    // 이번 년도 이번 달의 모든 날짜 리스트 반환 - new Date(2025, 5, 1), new Date(2025, 5, 2) ...
+    const getDaysInMonth = (year, month) => {
+        const date = new Date(year, month, 1); // 특정 달의 1일을 기준으로 한 날짜 객체를 생성
+        const days = [];
+
+        while (date.getMonth() === month) {
+            days.push(new Date(date));
+            date.setDate(date.getDate() + 1);
+        }
+        return days;
+    };
+
+    const today = formatDate(new Date())
+    console.log(today)
+
+    const days = getDaysInMonth(new Date().getFullYear(), new Date().getMonth());
+
+    return (
+        <>
+            <Header />
+            <div className="calendar-container">
+                <h2 className="calendar-title">이번 달 리워드 현황</h2>
+                <p>하루 한 번 리워드를 받아보세요 ! </p>
+                <div className="calendar-grid">
+                    {days.map((date) => {
+                        const dateString = formatDate(date);
+
+                        const isRewarded =
+                            rewardedDates.includes(dateString) ||
+                            userInfo?.last_reward_date === dateString;
+
+                        return (
+                            <div
+                                key={dateString}
+                                className={`calendar-day ${isRewarded ? "rewarded" : ""}`}
+                            >
+                                {date.getDate()}
+                            </div>
+                        );
+                    })}
+                </div>
+                <button onClick={setRewardDate} className="reward-button">
+                    리워드 받기
+                </button>
+            </div>
+        </>
+    );
+}
+
+export default Reward

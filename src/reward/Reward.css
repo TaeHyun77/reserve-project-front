@@ -1,0 +1,50 @@
+.calendar-container {
+    max-width: 800px;
+    margin: 10rem auto;
+    padding: 1.5rem;
+    background: #f9fafb;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .calendar-title {
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
+    font-weight: bold;
+  }
+  
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .calendar-day {
+    padding: 1rem;
+    background: #e5e7eb;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    color: #374151;
+  }
+  
+  .calendar-day.rewarded {
+    background: #34d399;
+    color: white;
+  }
+  
+  .reward-button {
+    background: #3a9f97;
+    color: white;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .reward-button:hover {
+    background: #2563eb;
+  }

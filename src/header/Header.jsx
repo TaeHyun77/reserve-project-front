@@ -47,6 +47,10 @@ const Header = () => {
               </li>
 
               <li>
+                <Link to="/reward">리워드</Link>
+              </li>
+
+              <li>
                 <Link to="/about">소개글</Link>
               </li>
             </>
