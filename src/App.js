@@ -12,6 +12,7 @@ import About from "./About"
 import Place from "./place/Place";
 import Seat from "./seat/Seat"
 import Payment from "./payment/Payment"
+import Reward from "./reward/Reward"
 
 const App = () => {
   return (
@@ -25,6 +26,8 @@ const App = () => {
           <Route path="/place/:id" element={<Place />} />
           <Route path="/Seat/:placeId/:performanceId" element={<Seat />} />
           <Route path="/payment" element={<Payment />} />
+          <Route path="/reward" element={<Reward />} />
+
         </Routes>
       </LoginContextProvider>
     </BrowserRouter>

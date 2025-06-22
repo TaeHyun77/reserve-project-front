@@ -16,3 +16,5 @@ export const seatList = (placeId, performanceId) => api.get(`/seat/list/${placeI
 export const reserveSeat = (seatsInfo) => api.post(`/seat/reserve`, seatsInfo)
 
 export const seatPrice = (performanceId) => api.get(`/seat/price/${performanceId}`)
+
+export const setRewardDate = (rewardedDates) => api.post(`/member/reward/${rewardedDates}`)
