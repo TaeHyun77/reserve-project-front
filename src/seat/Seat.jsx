@@ -6,13 +6,12 @@ import "./Seat.css";
 
 const Seat = () => {
     const navigate = useNavigate();
-
     const { screenInfoId } = useParams();
-    const [selectedSeats, setSelectedSeats] = useState([]);
-    const [seats, setSeats] = useState([]);
-    const [personCount, setPersonCount] = useState(1); // 인원 수 : 1 ~ 5명
 
-    const [seatPrice, setSeatPrice] = useState()
+    const [selectedSeats, setSelectedSeats] = useState([]);
+    const [reservedSeats, setReservedSeats] = useState([]); 
+    const [personCount, setPersonCount] = useState(1);
+    const [seatPrice, setSeatPrice] = useState();
 
     const totalRows = 5;
     const totalCols = 5;
@@ -35,13 +34,12 @@ const Seat = () => {
         try {
             const response = await auth.seatList(screenInfoId);
             const data = response.data;
-            console.log(data)
 
             const reserved = data
                 .filter((seat) => seat.is_reserved)
                 .map((seat) => seat.seatNumber);
 
-            setSeats(reserved);
+            setReservedSeats(reserved); 
 
             if (data.length > 0) {
                 const price = data[0]?.screenInfo?.performance?.price;
@@ -79,25 +77,23 @@ const Seat = () => {
 
     const decreasePerson = () => {
         setPersonCount((prev) => Math.max(prev - 1, 1));
-        setSelectedSeats((prev) => prev.slice(0, personCount - 1)); // 인원 수 줄이면 선택된 좌석도 줄임
+        setSelectedSeats((prev) => prev.slice(0, personCount - 1));
     };
 
     return (
         <>
             <Header />
             <div className="seat-container">
-
-
-                {seats.length === 0 ? (
+                {seatPrice === undefined ? (
                     <p className="no-seat-message">좌석 정보가 없습니다.</p>
                 ) : (
                     <>
-                        <h2>좌석을 선택하세요 🎟</h2>
+                        <h2>좌석을 선택하세요 🍿</h2>
                         <div className="seat-grid">
                             {[...Array(totalRows)].map((_, row) =>
                                 [...Array(totalCols)].map((_, col) => {
                                     const seatId = `${String.fromCharCode(65 + row)}${col + 1}`;
-                                    const isReserved = seats.includes(seatId);
+                                    const isReserved = reservedSeats.includes(seatId); 
                                     const isSelected = selectedSeats.includes(seatId);
 
                                     return (
@@ -117,7 +113,7 @@ const Seat = () => {
                     </>
                 )}
 
-                {seats.length > 0 && (
+                {seatPrice !== undefined && (
                     <>
                         <div className="person-counter">
                             <button onClick={decreasePerson}>-</button>
