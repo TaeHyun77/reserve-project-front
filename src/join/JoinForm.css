@@ -29,7 +29,7 @@
 }
 
 .join-form input {
-  width: 100%;
+  width: 92%;
   padding: 1.2rem;
   border-radius: 9px;
   border: 1px solid #ccc; 
@@ -101,4 +101,26 @@
   margin: 4px 0;
   color: red;
   font-size: 13px;
+}
+
+.username-area {
+  position: "relative";
+  margin-bottom: 40px;
+}
+
+.btn-check {
+  padding: 0 16px;
+  font-size: 14px;
+  border-radius: 9px;
+  border: none;
+  background-color: #3a9f97;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-check:hover {
+  background-color: white;
+  color: black;
 }

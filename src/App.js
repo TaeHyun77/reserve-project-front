@@ -13,6 +13,7 @@ import Place from "./place/Place";
 import Seat from "./seat/Seat"
 import Payment from "./payment/Payment"
 import Reward from "./reward/Reward"
+import ScreeningSchedule from "./screening_schedule/screening_schedule"
 
 const App = () => {
   return (
@@ -23,11 +24,11 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/join" element={<Join />} /> 
           <Route path="/about" element={<About />} /> 
-          <Route path="/place/:id" element={<Place />} />
-          <Route path="/Seat/:placeId/:performanceId" element={<Seat />} />
+          <Route path="/place/:placeId" element={<Place />} />
+          <Route path="/Seat/:screenInfoId" element={<Seat />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/reward" element={<Reward />} />
-
+          <Route path="/screening_schedule/:placeId/:performanceId" element={<ScreeningSchedule />} />
         </Routes>
       </LoginContextProvider>
     </BrowserRouter>

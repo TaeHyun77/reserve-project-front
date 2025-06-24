@@ -65,22 +65,34 @@ const JoinForm = () => {
         <h2 className="join-title">회원가입</h2>
 
         <form className="join-form" onSubmit={(e) => onJoin(e)}>
-          <div>
+          <div className = "username-area">
             <label htmlFor="username">아이디</label>
             <p className="form-hint">
-              대문자, 숫자를 적어도 하나 이상 포함해야 하며,  특수문자는 (@#%*^)만 허용됩니다.
+              대문자, 숫자를 적어도 하나 이상 포함해야 하며, 특수문자는 ( @#%*^ )만 허용됩니다.
             </p>
             <p className="form-hint2">
-              ⭐️ 공백 및 하이픈(-)을 사용할 시 자동으로 제거됩니다. ⭐️
+              확인 버튼을 눌러 아이디 형식이 올바른지와 중복 여부를 확인해주세요.
             </p>
-            <input
-              type="text"
-              id="username"
-              placeholder="username"
-              name="username"
-              autoComplete="username"
-              required
-            />
+            <p className="form-hint2">
+              공백 및 하이픈(-)을 사용할 시 자동으로 제거됩니다.
+            </p>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <input
+                type="text"
+                id="username"
+                placeholder="username"
+                name="username"
+                autoComplete="username"
+                required
+                style={{ flex: 1 }}
+              />
+              <button
+                type="button"
+                className="btn-check"
+              >
+                확인
+              </button>
+            </div>
           </div>
 
           <div>
