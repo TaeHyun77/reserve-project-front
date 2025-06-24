@@ -1,3 +1,4 @@
+import { use } from 'react';
 import api from './api';
 
 // 로그인
@@ -21,3 +22,5 @@ export const reserveSeat = (seatsInfo, headers = {}) => {
 export const seatPrice = (performanceId) => api.get(`/seat/price/${performanceId}`)
 
 export const setRewardDate = (today) => api.post(`/member/reward/${today}`)
+
+export const checkUsername = (username) => api.get(`/member/check/validation/${username}`)

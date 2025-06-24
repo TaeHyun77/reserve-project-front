@@ -105,7 +105,16 @@
 
 .username-area {
   position: "relative";
-  margin-bottom: 40px;
+}
+
+.text-blue {
+  font-size: 15px;
+  color: blue
+}
+
+.text-red {
+  font-size: 15px;
+  color: red
 }
 
 .btn-check {
