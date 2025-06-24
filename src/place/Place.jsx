@@ -6,12 +6,12 @@ import "./Place.css"
 
 const Place = () => {
     const navigate = useNavigate();
-    const { id } = useParams();
+    const { placeId } = useParams();
     const [performanceList, setPerformanceList] = useState([]);
 
     const getPerformanceList = async () => {
         try {
-            const response = await api.get(`/performance/list/${id}`);
+            const response = await api.get(`/performance/list/${placeId}`);
 
             console.log(response.data)
 
@@ -23,7 +23,7 @@ const Place = () => {
 
     useEffect(() => {
         getPerformanceList();
-    }, [id]);
+    }, [placeId]);
 
     return (
         <>
@@ -34,8 +34,8 @@ const Place = () => {
                         <div
                             key={performance.id}
                             className="performance-card"
-                            onClick={() => navigate(`/seat/${id}/${performance.id}`)}
-                            style={{ cursor: "pointer" }}  // 클릭 가능하게
+                            onClick={() => navigate(`/screening_schedule/${placeId}/${performance.id}`)}
+                            style={{ cursor: "pointer" }} 
                         >
                             <div className="performance-title">{performance.title}</div>
                             <div className="performance-type">{performance.type}</div>

@@ -1,0 +1,56 @@
+.screening-schedule-container {
+    padding: 40px 20px;
+}
+
+.performance-group {
+    margin-bottom: 50px;
+}
+
+.performance-title {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.screen-list-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+.screen-card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 16px;
+    width: 220px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.screen-card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.screen-card:hover {
+    transform: translateY(-4px);
+}
+
+.screen-card p {
+    font-size: 0.95em;
+    color: #444;
+    margin: 6px 0;
+}
+
+.loading-message {
+    text-align: center;
+    font-size: 1.1em;
+    margin-top: 60px;
+    color: #777;
+}

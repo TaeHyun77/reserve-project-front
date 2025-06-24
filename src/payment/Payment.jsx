@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
 import * as auth from "../api/auth";
 import "./Payment.css"
 
@@ -7,13 +8,20 @@ const Payment = () => {
     const navigate = useNavigate();
 
     const seatsInfo = location.state;
-    console.log(seatsInfo)
     const totalPrice = seatsInfo.seatPrice * seatsInfo.personCount;
 
     const handlePayment = async () => {
-        try {
 
-            const response = await auth.reserveSeat(seatsInfo);
+        const idempotencyKey = uuidv4(); // 멱등키 생성
+
+        const headers = {
+            'Idempotency-key' : idempotencyKey,
+        };
+
+        console.log(idempotencyKey)
+
+        try {
+            const response = await auth.reserveSeat(seatsInfo, headers);
 
             if (response.status === 200) {
                 alert("결제 성공 ! 좌석이 예약되었습니다.");
@@ -28,6 +36,9 @@ const Payment = () => {
 
             if (errorCode) {
                 switch (errorCode) {
+                    case "TIMEOUT": 
+                        alert("응답 지연으로 재시도합니다...");
+                        return await auth.reserveSeat(seatsInfo, headers)
                     case "SEAT_ALREADY_RESERVED":
                         alert("이미 예약된 좌석이 포함되어 있습니다.");
                         break;

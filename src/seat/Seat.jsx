@@ -7,10 +7,10 @@ import "./Seat.css";
 const Seat = () => {
     const navigate = useNavigate();
 
-    const { placeId, performanceId } = useParams();
+    const { screenInfoId } = useParams();
     const [selectedSeats, setSelectedSeats] = useState([]);
-    const [reservedSeats, setReservedSeats] = useState([]);
-    const [personCount, setPersonCount] = useState(1); // 인원 수, 1 ~ 5명
+    const [seats, setSeats] = useState([]);
+    const [personCount, setPersonCount] = useState(1); // 인원 수 : 1 ~ 5명
 
     const [seatPrice, setSeatPrice] = useState()
 
@@ -31,28 +31,23 @@ const Seat = () => {
         }
     };
 
-    const getSeatPrice = async () => {
-        try {
-            const response = await auth.seatPrice(performanceId);
-            const data = response.data;
-            console.log("seat price : " + data)
-
-            setSeatPrice(data);
-        } catch (error) {
-            console.error("좌석 가격 불러오기 실패 : " + error);
-        }
-    }
-
     const getSeatList = async () => {
         try {
-            const response = await auth.seatList(placeId, performanceId);
+            const response = await auth.seatList(screenInfoId);
             const data = response.data;
+            console.log(data)
 
             const reserved = data
                 .filter((seat) => seat.is_reserved)
                 .map((seat) => seat.seatNumber);
 
-            setReservedSeats(reserved);
+            setSeats(reserved);
+
+            if (data.length > 0) {
+                const price = data[0]?.screenInfo?.performance?.price;
+                setSeatPrice(price);
+            }
+
         } catch (error) {
             console.error("예약 좌석 리스트 불러오기 실패 : " + error);
         }
@@ -63,21 +58,19 @@ const Seat = () => {
             alert("좌석을 선택해주세요!");
             return;
         }
-    
+
         const seatsInfo = {
-            placeId: Number(placeId),
-            performanceId: Number(performanceId),
+            screenInfoId: screenInfoId,
             seats: selectedSeats,
             personCount: personCount,
             seatPrice: seatPrice
         };
-    
+
         navigate("/payment", { state: seatsInfo });
     };
 
     useEffect(() => {
         getSeatList();
-        getSeatPrice()
     }, []);
 
     const increasePerson = () => {
@@ -93,41 +86,50 @@ const Seat = () => {
         <>
             <Header />
             <div className="seat-container">
-                <h2>좌석을 선택하세요 🎟</h2>
 
 
+                {seats.length === 0 ? (
+                    <p className="no-seat-message">좌석 정보가 없습니다.</p>
+                ) : (
+                    <>
+                        <h2>좌석을 선택하세요 🎟</h2>
+                        <div className="seat-grid">
+                            {[...Array(totalRows)].map((_, row) =>
+                                [...Array(totalCols)].map((_, col) => {
+                                    const seatId = `${String.fromCharCode(65 + row)}${col + 1}`;
+                                    const isReserved = seats.includes(seatId);
+                                    const isSelected = selectedSeats.includes(seatId);
 
-                <div className="seat-grid">
-                    {[...Array(totalRows)].map((_, row) =>
-                        [...Array(totalCols)].map((_, col) => {
-                            const seatId = `${String.fromCharCode(65 + row)}${col + 1}`;
-                            const isReserved = reservedSeats.includes(seatId);
-                            const isSelected = selectedSeats.includes(seatId);
+                                    return (
+                                        <div
+                                            key={seatId}
+                                            className={`seat ${isSelected ? "selected" : ""} ${isReserved ? "reserved" : ""}`}
+                                            onClick={() => {
+                                                if (!isReserved) toggleSeat(seatId);
+                                            }}
+                                        >
+                                            {seatId}
+                                        </div>
+                                    );
+                                })
+                            )}
+                        </div>
+                    </>
+                )}
 
-                            return (
-                                <div
-                                    key={seatId}
-                                    className={`seat ${isSelected ? "selected" : ""} ${isReserved ? "reserved" : ""}`}
-                                    onClick={() => {
-                                        if (!isReserved) toggleSeat(seatId);
-                                    }}
-                                >
-                                    {seatId}
-                                </div>
-                            );
-                        })
-                    )}
-                </div>
+                {seats.length > 0 && (
+                    <>
+                        <div className="person-counter">
+                            <button onClick={decreasePerson}>-</button>
+                            <span>{personCount}명</span>
+                            <button onClick={increasePerson}>+</button>
+                        </div>
 
-                <div className="person-counter">
-                    <button onClick={decreasePerson}>-</button>
-                    <span>{personCount}명</span>
-                    <button onClick={increasePerson}>+</button>
-                </div>
-
-                <button className="reserve-button" onClick={goToPayment}>
-                    결제하기
-                </button>
+                        <button className="reserve-button" onClick={goToPayment}>
+                            결제하기
+                        </button>
+                    </>
+                )}
             </div>
         </>
     );

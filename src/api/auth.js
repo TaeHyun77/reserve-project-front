@@ -1,4 +1,4 @@
-import api from './api'; 
+import api from './api';
 
 // 로그인
 export const login = (username, password) => api.post(`/login?username=${username}&password=${password}`);
@@ -11,10 +11,13 @@ export const info = () => api.get(`/member/info`)
 
 export const placeList = () => api.get(`/place/list`)
 
-export const seatList = (placeId, performanceId) => api.get(`/seat/list/${placeId}/${performanceId}`)
+export const seatList = (screenInfoId) => api.get(`/seat/list/${screenInfoId}`)
 
-export const reserveSeat = (seatsInfo) => api.post(`/seat/reserve`, seatsInfo)
+// auth.js 또는 auth.ts
+export const reserveSeat = (seatsInfo, headers = {}) => {
+    return api.post(`/seat/reserve`, seatsInfo, { headers });
+};
 
 export const seatPrice = (performanceId) => api.get(`/seat/price/${performanceId}`)
 
-export const setRewardDate = (rewardedDates) => api.post(`/member/reward/${rewardedDates}`)
+export const setRewardDate = (today) => api.post(`/member/reward/${today}`)
