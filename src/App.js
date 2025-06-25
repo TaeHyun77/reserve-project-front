@@ -9,7 +9,7 @@ import Login from "./login/LoginForm"
 import Join from "./join/JoinForm"
 
 import About from "./About"
-import Place from "./place/Place";
+import Venue from "./venue/Venue";
 import Seat from "./seat/Seat"
 import Payment from "./payment/Payment"
 import Reward from "./reward/Reward"
@@ -24,11 +24,11 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/join" element={<Join />} /> 
           <Route path="/about" element={<About />} /> 
-          <Route path="/place/:placeId" element={<Place />} />
+          <Route path="/venue/:venueId" element={<Venue />} />
           <Route path="/Seat/:screenInfoId" element={<Seat />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/reward" element={<Reward />} />
-          <Route path="/screening_schedule/:placeId/:performanceId" element={<ScreeningSchedule />} />
+          <Route path="/screening_schedule/:venueId/:performanceId" element={<ScreeningSchedule />} />
         </Routes>
       </LoginContextProvider>
     </BrowserRouter>

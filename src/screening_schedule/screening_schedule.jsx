@@ -5,16 +5,16 @@ import Header from "../header/Header";
 import "./screening_schedule.css";
 
 const ScreeningSchedule = () => {
-    const { placeId, performanceId } = useParams();
+    const { venueId, performanceId } = useParams();
     const [groupedScreens, setGroupedScreens] = useState({});
 
     const fetchScreenList = async () => {
         try {
-            const response = await api.get(`/screenInfo/list/${placeId}/${performanceId}`);
+            const response = await api.get(`/screenInfo/list/${venueId}/${performanceId}`);
             console.log("조회된 상영 정보:", response.data);
 
             const grouped = {};
-            
+
             response.data.forEach((screen) => {
                 const title = screen.performance.title;
                 if (!grouped[title]) {
@@ -36,7 +36,7 @@ const ScreeningSchedule = () => {
 
     useEffect(() => {
         fetchScreenList();
-    }, [placeId, performanceId]);
+    }, [venueId, performanceId]);
 
     return (
         <>

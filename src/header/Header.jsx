@@ -1,15 +1,14 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LoginContext } from "../contexts/LoginContextProvider";
 import "./Header.css";
 
 const Header = () => {
+  const navigate = useNavigate()
   const { isLogin, userInfo, logout } = useContext(LoginContext);
 
-  // 드롭다운 상태 관리
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // 드롭다운 토글 함수
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
@@ -47,7 +46,20 @@ const Header = () => {
               </li>
 
               <li>
-                <Link to="/reward">리워드</Link>
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    if (!userInfo?.username) {
+                      e.preventDefault(); // 링크 이동 금지
+                      alert("로그인을 먼저 해주세요");
+                      navigate("/login")
+                    } else {
+                      navigate("/reward")
+                    }
+                  }}
+                >
+                  리워드
+                </a>
               </li>
 
               <li>
