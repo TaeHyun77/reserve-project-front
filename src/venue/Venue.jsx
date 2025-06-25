@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/api";
 import Header from "../header/Header";
-import "./Place.css"
+import "./Venue.css"
 
 const Place = () => {
     const navigate = useNavigate();
-    const { placeId } = useParams();
+    const { venueId } = useParams();
     const [performanceList, setPerformanceList] = useState([]);
 
     const getPerformanceList = async () => {
         try {
-            const response = await api.get(`/performance/list/${placeId}`);
+            const response = await api.get(`/performance/list/${venueId}`);
 
             console.log(response.data)
 
@@ -23,7 +23,7 @@ const Place = () => {
 
     useEffect(() => {
         getPerformanceList();
-    }, [placeId]);
+    }, [venueId]);
 
     return (
         <>
@@ -34,7 +34,7 @@ const Place = () => {
                         <div
                             key={performance.id}
                             className="performance-card"
-                            onClick={() => navigate(`/screening_schedule/${placeId}/${performance.id}`)}
+                            onClick={() => navigate(`/screening_schedule/${venueId}/${performance.id}`)}
                             style={{ cursor: "pointer" }} 
                         >
                             <div className="performance-title">{performance.title}</div>

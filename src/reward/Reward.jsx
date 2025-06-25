@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../contexts/LoginContextProvider";
 import * as auth from "../api/auth";
@@ -68,6 +68,13 @@ const Reward = () => {
     console.log(today)
 
     const days = getDaysInMonth(new Date().getFullYear(), new Date().getMonth());
+
+    useEffect(() => {
+        if (!userInfo?.username) {
+            alert("로그인을 먼저 해주세요");
+            navigate("/login");
+        }
+    }, [userInfo]);
 
     return (
         <>

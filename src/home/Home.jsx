@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import api from "../api/api";
 import * as auth from "../api/auth";
 import Header from "../header/Header";
 import { LoginContext } from "../contexts/LoginContextProvider";
@@ -8,18 +7,18 @@ import "./Home.css";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { isLogin, userInfo, logout } = useContext(LoginContext);
-  const [placeList, setPlaceList] = useState([])
+  const { isLogin } = useContext(LoginContext);
+  const [venueList, setVenueList] = useState([])
 
-  const getPlaceList = async () => {
+  const getVenueList = async () => {
 
     try {
-      const response = await auth.placeList();
+      const response = await auth.venueList();
       const data = response.data
       console.log(data)
 
       if (data != null) {
-        setPlaceList(data)
+        setVenueList(data)
       } else {
         console.log("장소 리스트 없음")
       }
@@ -29,9 +28,8 @@ const Home = () => {
   }
 
   useEffect(() => {
-    getPlaceList()
+    getVenueList()
   }, [])
-
 
   return (
     <>
@@ -39,23 +37,53 @@ const Home = () => {
       <div className="home-container">
         {isLogin ? (
           <div className="home-content">
-            <p className="home-message">공연장을 선택해보세요!</p>
 
-            <div className="place-card-container"
-            >
-              {placeList.map((place) => (
-                <div key={place.id} className="place-card"
-                  onClick={() => navigate(`/place/${place.id}`)}>
-                  <h2>{place.name}</h2>
-                  <p>{place.location}</p>
+            {venueList.length === 0 ? (
+              <p className="home-message">공연장 정보가 없습니다.</p>
+            ) : (
+              <>
+                <p className="home-message">공연장을 선택해보세요!</p>
+                <div className="place-card-container">
+                  {venueList.map((venue) => (
+                    <div
+                      key={venue.id}
+                      className="place-card"
+                      onClick={() => navigate(`/venue/${venue.id}`)}
+                    >
+                      <h2>{venue.name}</h2>
+                      <p>{venue.location}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </>
+            )}
           </div>
         ) : (
           <>
             <h1 className="home-title">환영합니다 👋</h1>
-            <p className="home-message">로그인을 해주세요</p>
+            <p className="home-message">로그인하여 공연을 예매해보세요</p>
+
+            <div className="home-content">
+
+              {venueList.length === 0 ? (
+                <p className="home-message">공연장 정보가 없습니다.</p>
+              ) : (
+                <>
+                  <div className="place-card-container">
+                    {venueList.map((venue) => (
+                      <div
+                        key={venue.id}
+                        className="place-card"
+                        onClick={() => navigate(`/venue/${venue.id}`)}
+                      >
+                        <h2>{venue.name}</h2>
+                        <p>{venue.location}</p>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </>
         )}
       </div>

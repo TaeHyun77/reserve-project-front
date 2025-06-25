@@ -10,11 +10,10 @@ export const join = (data) => api.post(`/member/save`, data);
 // 유저 정보
 export const info = () => api.get(`/member/info`)
 
-export const placeList = () => api.get(`/place/list`)
+export const venueList = () => api.get(`/venue/list`)
 
 export const seatList = (screenInfoId) => api.get(`/seat/list/${screenInfoId}`)
 
-// auth.js 또는 auth.ts
 export const reserveSeat = (seatsInfo, headers = {}) => {
     return api.post(`/seat/reserve`, seatsInfo, { headers });
 };
