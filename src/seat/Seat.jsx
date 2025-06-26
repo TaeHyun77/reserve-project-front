@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { LoginContext } from "../contexts/LoginContextProvider";
 import Header from "../header/Header";
 import * as auth from "../api/auth";
 import "./Seat.css";
 
 const Seat = () => {
     const navigate = useNavigate();
+    const { userInfo } = useContext(LoginContext);
     const { screenInfoId } = useParams();
 
     const [selectedSeats, setSelectedSeats] = useState([]);
-    const [reservedSeats, setReservedSeats] = useState([]); 
+    const [reservedSeats, setReservedSeats] = useState([]);
     const [personCount, setPersonCount] = useState(1);
     const [seatPrice, setSeatPrice] = useState();
 
@@ -17,8 +19,13 @@ const Seat = () => {
     const totalCols = 5;
 
     const toggleSeat = (seatId) => {
+        if (!userInfo?.username) {
+            alert("로그인 후 예매를 진행할 수 있습니다.");
+            return;
+        }
+    
         const isSelected = selectedSeats.includes(seatId);
-
+    
         if (isSelected) {
             setSelectedSeats((prev) => prev.filter((s) => s !== seatId));
         } else {
@@ -39,7 +46,7 @@ const Seat = () => {
                 .filter((seat) => seat.is_reserved)
                 .map((seat) => seat.seatNumber);
 
-            setReservedSeats(reserved); 
+            setReservedSeats(reserved);
 
             if (data.length > 0) {
                 const price = data[0]?.screenInfo?.performance?.price;
@@ -93,7 +100,7 @@ const Seat = () => {
                             {[...Array(totalRows)].map((_, row) =>
                                 [...Array(totalCols)].map((_, col) => {
                                     const seatId = `${String.fromCharCode(65 + row)}${col + 1}`;
-                                    const isReserved = reservedSeats.includes(seatId); 
+                                    const isReserved = reservedSeats.includes(seatId);
                                     const isSelected = selectedSeats.includes(seatId);
 
                                     return (
@@ -115,15 +122,21 @@ const Seat = () => {
 
                 {seatPrice !== undefined && (
                     <>
-                        <div className="person-counter">
-                            <button onClick={decreasePerson}>-</button>
-                            <span>{personCount}명</span>
-                            <button onClick={increasePerson}>+</button>
-                        </div>
+                        {userInfo?.username ? (
+                            <>
+                                <div className="person-counter">
+                                    <button onClick={decreasePerson}>-</button>
+                                    <span>{personCount}명</span>
+                                    <button onClick={increasePerson}>+</button>
+                                </div>
 
-                        <button className="reserve-button" onClick={goToPayment}>
-                            결제하기
-                        </button>
+                                <button className="reserve-button" onClick={goToPayment}>
+                                    예매하기
+                                </button>
+                            </>
+                        ) : (
+                            <p className="login-warning">로그인 후 예매해보세요.</p>
+                        )}
                     </>
                 )}
             </div>

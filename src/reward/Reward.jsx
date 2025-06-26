@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../contexts/LoginContextProvider";
+import { v4 as uuidv4 } from 'uuid';
 import * as auth from "../api/auth";
 import Header from "../header/Header"
 import "./Reward.css";
@@ -25,13 +26,32 @@ const Reward = () => {
     };
 
     const setRewardDate = async () => {
+
+        if (userInfo.username == null) {
+            alert("로그인 후 이용 가능합니다.")
+            navigate("/login")
+        }
+
+        const check = window.confirm("오늘 리워드를 지급 받으시겠습니까 ?")
+
+        if (!check) return;
+
+        const idempotencyKey = uuidv4(); // 멱등키 생성
+
+        const headers = {
+            'Idempotency-key': idempotencyKey,
+        };
+
+        console.log(idempotencyKey)
+
         try {
-            const response = await auth.setRewardDate(today)
+            const response = await auth.payRewardToday(today, headers)
 
             if (response.status === 200) {
                 alert("200 포인트 지급 성공 !");
                 navigate("/reward");
             }
+
         } catch (error) {
             console.error("리워드 지급 실패 :", error);
 
@@ -69,37 +89,25 @@ const Reward = () => {
 
     const days = getDaysInMonth(new Date().getFullYear(), new Date().getMonth());
 
-    useEffect(() => {
-        if (!userInfo?.username) {
-            alert("로그인을 먼저 해주세요");
-            navigate("/login");
-        }
-    }, [userInfo]);
-
     return (
         <>
             <Header />
             <div className="calendar-container">
-                <h2 className="calendar-title">이번 달 리워드 현황</h2>
-                <p>하루 한 번 리워드를 받아보세요 ! </p>
+                <h2 className="calendar-title">당일 리워드 지급 현황</h2>
+                <p className="reward-point">
+                    보유 리워드: <strong>{userInfo?.reward ?? 0}</strong> 포인트
+                </p>
+                <p style={{ marginBottom: "40px" }}>하루 한 번 리워드를 받아보세요!</p>
+
                 <div className="calendar-grid">
-                    {days.map((date) => {
-                        const dateString = formatDate(date);
-
-                        const isRewarded =
-                            rewardedDates.includes(dateString) ||
-                            userInfo?.last_reward_date === dateString;
-
-                        return (
-                            <div
-                                key={dateString}
-                                className={`calendar-day ${isRewarded ? "rewarded" : ""}`}
-                            >
-                                {date.getDate()}
-                            </div>
-                        );
-                    })}
+                    <div
+                        className={`calendar-day ${userInfo?.last_reward_date === today ? "rewarded" : ""
+                            }`}
+                    >
+                        {new Date().toLocaleDateString().substring(0, 10)}
+                    </div>
                 </div>
+
                 <button onClick={setRewardDate} className="reward-button">
                     리워드 받기
                 </button>
