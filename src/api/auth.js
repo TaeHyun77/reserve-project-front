@@ -20,6 +20,6 @@ export const reserveSeat = (seatsInfo, headers = {}) => {
 
 export const seatPrice = (performanceId) => api.get(`/seat/price/${performanceId}`)
 
-export const setRewardDate = (today) => api.post(`/member/reward/${today}`)
+export const payRewardToday = (today, headers = {}) => { return api.post(`/member/reward/${today}`, null, {headers}) }
 
 export const checkUsername = (username) => api.get(`/member/check/validation/${username}`)
