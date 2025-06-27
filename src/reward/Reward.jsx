@@ -10,19 +10,14 @@ const Reward = () => {
     const navigate = useNavigate()
 
     const { userInfo } = useContext(LoginContext);
-    const [rewardedDates, setRewardedDates] = useState([]);
+    const [reward, setReward] = useState(userInfo?.reward);
+    const [lastRewardDate, setLastRewardDate] = useState(userInfo?.last_reward_date);
 
     const formatDate = (date) => {
         const yyyy = date.getFullYear();
         const mm = String(date.getMonth() + 1).padStart(2, "0");
         const dd = String(date.getDate()).padStart(2, "0");
         return `${yyyy}-${mm}-${dd}`;
-    };
-
-    const handleReward = () => {
-        if (!rewardedDates.includes(today)) {
-            setRewardedDates([...rewardedDates, today]);
-        }
     };
 
     const setRewardDate = async () => {
@@ -48,6 +43,8 @@ const Reward = () => {
             const response = await auth.payRewardToday(today, headers)
 
             if (response.status === 200) {
+                setReward(prev => prev + 200);
+                setLastRewardDate(today);
                 alert("200 포인트 지급 성공 !");
                 navigate("/reward");
             }
@@ -89,19 +86,24 @@ const Reward = () => {
 
     const days = getDaysInMonth(new Date().getFullYear(), new Date().getMonth());
 
+    useEffect(() => {
+        setReward(userInfo?.reward);
+        setLastRewardDate(userInfo?.last_reward_date);
+    }, [userInfo]);
+
     return (
         <>
             <Header />
             <div className="calendar-container">
                 <h2 className="calendar-title">당일 리워드 지급 현황</h2>
                 <p className="reward-point">
-                    보유 리워드: <strong>{userInfo?.reward ?? 0}</strong> 포인트
+                    보유 리워드: <strong>{reward}</strong> 포인트
                 </p>
                 <p style={{ marginBottom: "40px" }}>하루 한 번 리워드를 받아보세요!</p>
 
                 <div className="calendar-grid">
                     <div
-                        className={`calendar-day ${userInfo?.last_reward_date === today ? "rewarded" : ""
+                        className={`calendar-day ${lastRewardDate === today ? "rewarded" : ""
                             }`}
                     >
                         {new Date().toLocaleDateString().substring(0, 10)}
