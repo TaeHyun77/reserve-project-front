@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom";
 import { LoginContext } from "../contexts/LoginContextProvider";
 import { v4 as uuidv4 } from 'uuid';
@@ -8,17 +8,32 @@ import "./Payment.css"
 
 const Payment = () => {
     const navigate = useNavigate();
-    const { userInfo } = useContext(LoginContext);
+    const { isLogin } = useContext(LoginContext);
+    const [userInfo, setUserInfo] = useState();
 
     const location = useLocation();
     const seatsInfo = location.state;
 
     const [useReward, setUseReward] = useState(false); // 결제 시 포인트 사용 여부
 
-    const availableReward = userInfo?.reward > 0 ? userInfo.reward : 0;
-
     const price = seatsInfo.seatPrice * seatsInfo.personCount; // 총 가격
-    const usedReward = useReward ? Math.min(availableReward, price) : 0;  // 할인 가격
+    const usedReward = useReward ? Math.min(userInfo.reward, price) : 0;  // 할인 가격
+
+    const getUserInfo = async () => {
+        if (!isLogin) {
+          navigate("/login");
+          return;
+        }
+    
+        try {
+          const response = await auth.info();
+          const data = response.data;
+          console.log("Fetched userInfo:", data);
+          setUserInfo(data);
+        } catch (error) {
+          console.error("사용자 정보를 불러오는 중 에러 발생", error);
+        }
+      };
 
     const handlePayment = async () => {
 
@@ -74,6 +89,12 @@ const Payment = () => {
         }
     };
 
+    useEffect(() => {
+        if (isLogin) {
+            getUserInfo();
+        }
+    }, [isLogin]);
+
     return (
         <>
             <Header />
@@ -83,11 +104,11 @@ const Payment = () => {
                     <p><strong>선택한 좌석 :</strong> {seatsInfo.seats.join(", ")}</p>
                     <p><strong>인원 수 :</strong> {seatsInfo.personCount}명</p>
                     <label className="payment_price">
-                        <p><strong>보유 포인트 :</strong> {availableReward}P</p>
+                        <p><strong>보유 포인트 :</strong> {userInfo?.reward}P</p>
                         <button
                             className="reward-toggle-button"
                             onClick={() => {
-                                if (availableReward <= 0) {
+                                if (userInfo.reward <= 0) {
                                     alert("사용 가능한 포인트가 없습니다.");
                                     return;
                                 }
