@@ -10,7 +10,7 @@ const Reward = () => {
     const navigate = useNavigate()
 
     const { userInfo } = useContext(LoginContext);
-    const [reward, setReward] = useState(userInfo?.reward);
+    const [reward, setReward] = useState();
     const [lastRewardDate, setLastRewardDate] = useState(userInfo?.last_reward_date);
 
     const formatDate = (date) => {
@@ -43,25 +43,23 @@ const Reward = () => {
             const response = await auth.payRewardToday(today, headers)
 
             if (response.status === 200) {
+                alert("200 포인트 지급 성공 !");
                 setReward(prev => prev + 200);
                 setLastRewardDate(today);
-                alert("200 포인트 지급 성공 !");
                 navigate("/reward");
             }
 
         } catch (error) {
-            console.error("리워드 지급 실패 :", error);
 
-            const errorCode = error?.response?.data?.code;
-            const errorMessage = error?.response?.data?.message;
+            const errorMessage = error?.response?.data
 
-            if (errorCode) {
-                switch (errorCode) {
+            if (errorMessage) {
+                switch (errorMessage) {
                     case "REWARD_ALREADY_CLAIMED":
                         alert("오늘 이미 리워드가 지급되었습니다.");
                         break;
                     default:
-                        alert("리워드 지급 실패: " + (errorMessage || "알 수 없는 오류"));
+                        alert("리워드 지급 실패, 다시 시도해주세요 " + (errorMessage || "알 수 없는 오류"));
                 }
             } else {
                 alert("리워드 지급 실패 ! 서버 응답이 없습니다.");

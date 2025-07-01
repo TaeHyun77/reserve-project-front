@@ -7,33 +7,17 @@ import Header from "../header/Header"
 import "./Payment.css"
 
 const Payment = () => {
-    const navigate = useNavigate();
-    const { isLogin } = useContext(LoginContext);
-    const [userInfo, setUserInfo] = useState();
 
     const location = useLocation();
     const seatsInfo = location.state;
 
-    const [useReward, setUseReward] = useState(false); // 결제 시 포인트 사용 여부
+    const navigate = useNavigate();
+    const { userInfo } = useContext(LoginContext);
+
+    const [useReward, setUseReward] = useState(false); 
 
     const price = seatsInfo.seatPrice * seatsInfo.personCount; // 총 가격
-    const usedReward = useReward ? Math.min(userInfo.reward, price) : 0;  // 할인 가격
-
-    const getUserInfo = async () => {
-        if (!isLogin) {
-          navigate("/login");
-          return;
-        }
-    
-        try {
-          const response = await auth.info();
-          const data = response.data;
-          console.log("Fetched userInfo:", data);
-          setUserInfo(data);
-        } catch (error) {
-          console.error("사용자 정보를 불러오는 중 에러 발생", error);
-        }
-      };
+    const discount = useReward ? Math.min(userInfo?.reward, price) : 0;  // 할인 가격
 
     const handlePayment = async () => {
 
@@ -49,7 +33,7 @@ const Payment = () => {
         const paymentInfo = {
             screenInfoId: seatsInfo.screenInfoId,
             seats: seatsInfo.seats,
-            usedReward: usedReward
+            rewardDiscount: discount
         }
 
         try {
@@ -61,13 +45,11 @@ const Payment = () => {
             }
 
         } catch (error) {
-            console.error("예약 실패:", error);
 
-            const errorCode = error?.response?.data?.code;
-            const errorMessage = error?.response?.data?.message;
+            const errorMessage = error?.response?.data
 
-            if (errorCode) {
-                switch (errorCode) {
+            if (errorMessage) {
+                switch (errorMessage) {
                     case "TIMEOUT":
                         alert("응답 지연으로 재시도합니다...");
                         return await auth.reserveSeat(seatsInfo, headers)
@@ -77,23 +59,17 @@ const Payment = () => {
                     case "NOT_ENOUGH_CREDIT":
                         alert("보유하신 금액이 부족합니다.");
                         break;
-                    case "SEAT_NOT_FOUND":
+                    case "NOT_EXIST_SEAT_INFO":
                         alert("선택한 좌석 정보를 찾을 수 없습니다.");
                         break;
                     default:
-                        alert("예약 실패: " + (errorMessage || "알 수 없는 오류"));
+                        alert("예약 실패, 다시 시도해주세요. " + (errorMessage || "알 수 없는 오류"));
                 }
             } else {
                 alert("예약 중 오류가 발생했습니다. 서버 응답이 없습니다.");
             }
         }
     };
-
-    useEffect(() => {
-        if (isLogin) {
-            getUserInfo();
-        }
-    }, [isLogin]);
 
     return (
         <>
@@ -118,7 +94,7 @@ const Payment = () => {
                             {useReward ? "사용 취소" : "포인트 사용"}
                         </button>
                     </label>
-                    <p><strong>결제 금액 :</strong> {price - usedReward}원</p>
+                    <p><strong>결제 금액 :</strong> {price - discount}원</p>
                 </div>
                 <button className="payment-button" onClick={handlePayment}>
                     결제하기

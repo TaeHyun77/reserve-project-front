@@ -20,6 +20,12 @@ export const reserveSeat = (seatsInfo, headers = {}) => {
 
 export const seatPrice = (performanceId) => api.get(`/seat/price/${performanceId}`)
 
-export const payRewardToday = (today, headers = {}) => { return api.post(`/member/reward/${today}`, null, {headers}) }
+export const payRewardToday = (today, headers = {}) => { return api.post(`/member/reward/${today}`, null, { headers }) }
 
 export const checkUsername = (username) => api.get(`/member/check/validation/${username}`)
+
+export const cancelReservation = (reserveNumber, headers = {}) => {
+    return api.delete(`/reserve/delete/${reserveNumber}`, {
+        headers
+    });
+}

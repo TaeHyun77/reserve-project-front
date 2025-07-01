@@ -14,6 +14,8 @@ import Seat from "./seat/Seat"
 import Payment from "./payment/Payment"
 import Reward from "./reward/Reward"
 import ScreeningSchedule from "./screening_schedule/screening_schedule"
+import ReserveInfo from "./reserveInfo/ReserveInfo"
+
 
 const App = () => {
   return (
@@ -29,6 +31,7 @@ const App = () => {
           <Route path="/payment" element={<Payment />} />
           <Route path="/reward" element={<Reward />} />
           <Route path="/screening_schedule/:venueId/:performanceId" element={<ScreeningSchedule />} />
+          <Route path="/reserveInfo" element={<ReserveInfo />} />
         </Routes>
       </LoginContextProvider>
     </BrowserRouter>
