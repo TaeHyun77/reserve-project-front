@@ -1,0 +1,116 @@
+.reserve-container {
+    max-width: 900px;
+    margin: 140px auto;
+    padding: 20px;
+    font-family: "Noto Sans KR", sans-serif;
+}
+
+.reserve-title {
+    font-size: 25px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.no-reserve {
+    text-align: center;
+    color: #999;
+    font-size: 16px;
+    margin-top: 60px;
+}
+
+.reserve-list {
+    list-style: none;
+    padding: 0;
+}
+
+.reserve-item {
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background-color: #fdfdfd;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.reservation-number {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.reserve-item hr {
+    margin: 10px 0 16px;
+    border: 0;
+    border-top: 1px solid #e0e0e0;
+}
+
+.reserve-detail p {
+    font-size: 16px;
+    margin: 6px 0;
+    color: #444;
+}
+
+.reward-discount {
+    font-size: 50px;
+    color: red;
+    margin-top: 4px;
+    margin-bottom: 6px;
+}
+
+.reserve-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cancel-button {
+    padding: 6px 12px;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cancel-button:hover {
+    background-color: #dc2626;
+}
+
+.reserve-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 60px;
+    row-gap: 10px;
+    align-items: start;
+    margin-top: 10px;
+  }
+  
+  .reserve-grid p {
+    margin: 6px 0;
+    font-size: 16px;
+    color: #444;
+  }
+  
+  .reserve-grid p:nth-child(2n) { 
+    padding-left: 150px; 
+  }
+  
+  .reward-discount {
+    font-size: 14px;
+    color: #10b981;
+  }
+  
+  .final-price {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  
+  .created-at {
+    font-size: 14px;
+    color: #888;
+  }

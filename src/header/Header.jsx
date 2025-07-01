@@ -40,6 +40,14 @@ const Header = () => {
               <li><h5 class="user-text">{userInfo?.name}님 환영합니다</h5></li>
 
               <li>
+                <p>보유 크레딧 : {userInfo?.credit}</p>
+              </li>
+
+              <li>
+                <p>보유 포인트 : {userInfo?.reward}</p>
+              </li>
+
+              <li>
                 <button onClick={logout}>
                   로그아웃
                 </button>
@@ -64,6 +72,10 @@ const Header = () => {
 
               <li>
                 <Link to="/about">소개글</Link>
+              </li>
+
+              <li>
+                <Link to="/reserveInfo">예약 내역</Link>
               </li>
             </>
           )}

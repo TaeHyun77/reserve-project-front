@@ -78,18 +78,15 @@ const LoginContextProvider = ({ children }) => {
 
   // 로그인 세팅
   const loginSetting = (userData, accessToken) => {
-    const { username, role, name, email, last_reward_date, reward } = userData;
+    const { username, role, name, email, last_reward_date, reward, credit, reserveList, createdAt, seats, startTime, endTime } = userData;
 
-    console.log(`username: ${username}`);
-    console.log(`role : ${role}`);
-    console.log(`name : ${name}`);
-    console.log(`email : ${email}`);
+    console.log(userData);
 
     api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
     setIsLogin(true);
 
-    const updatedUserInfo = { username, role, name, email, last_reward_date, reward };
+    const updatedUserInfo = { username, role, name, email, last_reward_date, reward, credit, reserveList, createdAt, seats, startTime, endTime };
     setUserInfo(updatedUserInfo);
 
     const updatedRoles = { isUser: false, isAdmin: false };
