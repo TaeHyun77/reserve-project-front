@@ -10,7 +10,6 @@ const JoinForm = () => {
   const [usernameChecked, setUsernameChecked] = useState(false);
   const usernameRef = useRef();
 
-
   const onJoin = (e) => {
     e.preventDefault();
 
@@ -86,6 +85,8 @@ const JoinForm = () => {
       const response = await auth.checkUsername(username);
       const isAvailable = response.data.available;
 
+      console.log(response.data.available)
+
       if (isAvailable) {
         alert("사용 가능한 아이디입니다.");
         setUsernameChecked(true);
@@ -94,18 +95,18 @@ const JoinForm = () => {
     } catch (error) {
       console.error("아이디 확인 중 오류 발생:", error);
 
-      const errorCode = error?.response?.data?.code;
-      const errorMessage = error?.response?.data?.message;
+      const errorMessage = error?.response?.data.code
+      console.log(errorMessage)
 
-      if (errorCode) {
-        switch (errorCode) {
+      if (errorMessage) {
+        switch (errorMessage) {
           case "DUPLICATED_USERNAME":
             setUsernameChecked(false);
             alert("이미 사용 중인 아이디입니다.");
             break;
           case "INVALID_USERNAME":
             setUsernameChecked(false);
-            alert("유효하지 않은 아이디입니다.");
+            alert("유효하지 않은 형식의 아이디입니다.");
             break;
           default:
             setUsernameChecked(false);
@@ -128,7 +129,7 @@ const JoinForm = () => {
           <div className="username-area">
             <label htmlFor="username">아이디</label>
             <p className="form-hint">
-              대문자, 숫자를 적어도 하나 이상 포함해야 하며, 특수문자는 ( @#%*^ )만 허용됩니다.
+              대문자, 숫자를 적어도 하나 이상 포함해야 하며, 특수문자는 ( @*^ )만 허용됩니다.
             </p>
             <p className="form-hint2">
               공백 및 하이픈( - )은 자동으로 제거됩니다.

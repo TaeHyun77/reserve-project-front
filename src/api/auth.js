@@ -15,7 +15,7 @@ export const venueList = () => api.get(`/venue/list`)
 export const seatList = (screenInfoId) => api.get(`/seat/list/${screenInfoId}`)
 
 export const reserveSeat = (seatsInfo, headers = {}) => {
-    return api.post(`/seat/reserve`, seatsInfo, { headers });
+    return api.post(`/reserve/reserve`, seatsInfo, { headers });
 };
 
 export const seatPrice = (performanceId) => api.get(`/seat/price/${performanceId}`)
