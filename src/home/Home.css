@@ -69,3 +69,19 @@
 .place-link:hover {
     text-decoration: underline;
 }
+
+.home-button {
+    padding: 10px 20px;
+    background-color: #3a9f97;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+    margin-top: 15px;
+}
+
+.home-button:hover {
+    background-color: #0056b3;
+}
