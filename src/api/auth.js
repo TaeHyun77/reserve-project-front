@@ -29,3 +29,5 @@ export const cancelReservation = (reserveNumber, headers = {}) => {
         headers
     });
 }
+
+export const register = (queueType, userId) => api.post(`/queue/register?userId=${userId}&queueType=${queueType}`)

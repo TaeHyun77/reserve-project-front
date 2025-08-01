@@ -7,6 +7,7 @@ import "./Home.css";
 
 const Home = () => {
   const navigate = useNavigate();
+
   const { isLogin } = useContext(LoginContext);
   const [venueList, setVenueList] = useState([])
 
@@ -48,7 +49,7 @@ const Home = () => {
                     <div
                       key={venue.id}
                       className="place-card"
-                      onClick={() => navigate(`/venue/${venue.id}`)}
+                      onClick={() => navigate(`/venue/${venue.id}`)}                      
                     >
                       <h2>{venue.name}</h2>
                       <p>{venue.location}</p>
@@ -74,7 +75,7 @@ const Home = () => {
                       <div
                         key={venue.id}
                         className="place-card"
-                        onClick={() => navigate(`/venue/${venue.id}`)}
+                        onClick={() => navigate(`/venue/${venue.id}`)}                      
                       >
                         <h2>{venue.name}</h2>
                         <p>{venue.location}</p>

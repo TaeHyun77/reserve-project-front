@@ -88,29 +88,29 @@
     row-gap: 10px;
     align-items: start;
     margin-top: 10px;
-  }
-  
-  .reserve-grid p {
+}
+
+.reserve-grid p {
     margin: 6px 0;
     font-size: 16px;
     color: #444;
-  }
-  
-  .reserve-grid p:nth-child(2n) { 
-    padding-left: 150px; 
-  }
-  
-  .reward-discount {
+}
+
+.reserve-grid p:nth-child(2n) {
+    padding-left: 150px;
+}
+
+.reward-discount {
     font-size: 14px;
     color: #10b981;
-  }
-  
-  .final-price {
+}
+
+.final-price {
     font-weight: 600;
     font-size: 16px;
-  }
-  
-  .created-at {
+}
+
+.created-at {
     font-size: 14px;
     color: #888;
-  }
+}
